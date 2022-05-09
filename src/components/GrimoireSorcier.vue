@@ -1,6 +1,5 @@
 <template>
     <div class="ma-12">
-        <div class="text-h2 my-6 text-center">Grimoire du sorcier</div>
         <v-row>
             <v-col cols="6">
                 <v-row justify="center">
