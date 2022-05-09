@@ -2,16 +2,23 @@
     <v-app>
         <v-main>
             <div class="ma-12">
+                <div class="text-h2 my-6 text-center">Grimoire de l'arcaniste</div>
                 <v-row justify="center">
                     <v-col cols="6">
-                        <v-row>
+                        <v-row justify="center">
                             <v-col cols="8">
                                 <v-text-field v-model="searchQuery" label="Rechercher un sort" hide-details> </v-text-field>
                             </v-col>
-                            <v-col cols="4">
-                                <v-text-field v-model="spellLevel" label="Niveau du sort" type="number" min="1" max="10" hide-details></v-text-field>
+                        </v-row>
+                        <v-row justify="center">
+                            <v-col cols="auto">
+                                <v-switch v-model="sortLevel" label="Trier par niveau" color="blue" hide-details> </v-switch>
+                            </v-col>
+                            <v-col cols="3">
+                                <v-text-field v-model="spellLevel" label="Niveau du sort" type="number" min="1" max="10" hide-details :disabled="!sortLevel"></v-text-field>
                             </v-col>
                         </v-row>
+
                         <v-divider class="my-6"></v-divider>
                         <div v-for="(searchResult, index) in searchResults" :key="index">
                             {{ searchResult.item.translations.fr.name }}
@@ -30,13 +37,17 @@ import { onMounted } from "vue";
 
 let searchQuery = ref("");
 let spellLevel = ref(1);
+let sortLevel = ref(true);
 
 const spellList = computed(() => {
     let spells = spells_srd;
     spells = spells.filter((spell) => spell.type == "spell");
     spells = spells.filter((spell) => spell.traditions.includes("arcane"));
     spells = spells.filter((spell) => spell.translations.fr.status != "aucune");
-    spells = spells.filter((spell) => spell.level == spellLevel.value);
+    if (sortLevel.value) {
+        spells = spells.filter((spell) => spell.level == spellLevel.value);
+    }
+
     return spells;
 });
 
